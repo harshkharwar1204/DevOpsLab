@@ -2,25 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repo') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/harshkharwar1204/DevOpsLab.git'
+                git 'https://github.com/harshkharwar1204/DevOpsLab' 
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    docker.build('devops-lab-app')
-                }
+                sh 'pip3 install -r requirements.txt || true'
             }
         }
 
-        stage('Run Container') {
+        stage('Run Scraper') {
             steps {
-                sh 'docker run -d -p 5001:5000 devops-lab-app'
+                sh 'python3 scraper.py'
+            }
+        }
+
+        stage('Archive Output') {
+            steps {
+                archiveArtifacts artifacts: 'books.csv', fingerprint: true
+            }
+        }
+
+        stage('Done') {
+            steps {
+                echo '✅ Pipeline completed successfully!'
             }
         }
     }
 }
-e
