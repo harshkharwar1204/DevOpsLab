@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/harshkharwar1204/DevOpsLab' 
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 sh 'pip3 install -r requirements.txt || true'
